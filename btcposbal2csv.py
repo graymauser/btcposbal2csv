@@ -62,7 +62,19 @@ def input_args():
              'warning - cannot decode address for this type of transactions, the total output'
              'for these addresses will be included under P2PK entry in output csv file'
     )
+    parser.add_argument(
+        '--sort',
+        metavar='ASC/DESC',
+        type=str,
+        default=None,
+        help='sort addresses by output ammount '
+             'ASCending / DESCending '
+             'if not given not sorting will be done'
+    )
     a = parser.parse_args()
+
+    if a.sort not in {None, 'ASC', 'DESC'}:
+        raise AssertionError('--sort can be only "ASC" or "DESC"')
 
     if a.keep_sqlite and not a.lowmem:
         raise AssertionError('--keep_sqlite cannot be used with --lowmem')
@@ -149,9 +161,18 @@ def low_mem(in_args):
             curr.execute(expinsert, (add, 0, 0))
             curr.execute(expupdate, (val, height, add))
 
-        curr.execute('SELECT * FROM balance')
+        if in_args.sort is None:
+            exp = 'SELECT * FROM balance'
+        elif in_args.sort == 'ASC':
+            exp = 'SELECT * FROM balance ORDER BY amount ASC'
+        elif in_args.sort == 'DESC':
+            exp = 'SELECT * FROM balance ORDER BY amount DESC'
+        else:
+            raise Exception
 
-        for j in curr.fetchall():
+        curr.execute(exp)
+
+        for j in curr:
             yield j[0], j[1], j[2]
 
         conn.commit()
