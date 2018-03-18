@@ -199,15 +199,17 @@ if __name__ == '__main__':
         with open(args.out, 'w') as f:
             c = 0
             for address, sat_val, block_height in add_iter:
+                if sat_val == 0:
+                    continue
                 w.append(
                     address + ',' + str(sat_val) + ',' + str(block_height)
                 )
                 c += 1
                 if c == 1000:
-                    f.write('\n' + '\n'.join(w))
+                    f.write('\n'.join(w) + '\n')
                     w = []
                     c = 0
             if c > 0:
-                f.write('\n' + '\n'.join(w))
+                f.write('\n'.join(w) + '\n')
             f.write('\n')
         print('writen to %s' % args.out)
