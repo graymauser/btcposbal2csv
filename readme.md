@@ -7,13 +7,7 @@ python 2.7
 pip  
 
 #### To install:  
-run pip install -r requirements.txt
-
-or install following packages with pip manualy
-* hashlib
-* plyvel
-* base58
-* sqlite3
+run sudo ./install.sh
 
 #### Usage
 To use you will need copy of chainstate database as created by [bitcoin core](https://bitcoin.org/en/bitcoin-core/)
