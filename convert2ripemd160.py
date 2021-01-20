@@ -1,6 +1,7 @@
 import base58
 import binascii
 import argparse
+import bech32
 
 
 def tocondensed(add_or_pk):
@@ -16,8 +17,12 @@ def process(csvfile):
             elif row.strip() == '':
                 break
 
-            ripemd_bin = tocondensed(row.split(',')[0])
-            ripemd_encoded = binascii.hexlify(ripemd_bin)
+            if row[:3].lower() == 'bc1':
+                _, script_int = bech32.decode('bc', row.split(',')[0].lower())
+                ripemd_encoded = binascii.hexlify(bytearray(script_int))
+            else:
+                ripemd_bin = tocondensed(row.split(',')[0])
+                ripemd_encoded = binascii.hexlify(ripemd_bin)
             print(row[: -1] + ',' + ripemd_encoded.decode())
 
 
