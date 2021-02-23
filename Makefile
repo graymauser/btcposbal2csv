@@ -8,7 +8,7 @@ else
  PIP := pip
 endif
 export
-run: requirements.txt btcposbal2csv.py
+$(BALANCES): requirements.txt btcposbal2csv.py
 	# stop bitcoind if running, to avoid corrupting chainstate
 	$(PIP) install --user --requirement $<
 	if $$(pidof bitcoind); then \

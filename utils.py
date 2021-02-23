@@ -32,10 +32,10 @@ def txout_decompress(x):
         return 0
     x -= 1
     e = x % 10
-    x /= 10
+    x //= 10
     if e < 9:
         d = (x % 9) + 1
-        x /= 9
+        x //= 9
         n = x * 10 + d
     else:
         n = x + 1
