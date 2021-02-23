@@ -19,6 +19,7 @@ run: requirements.txt btcposbal2csv.py
 	 $(PYTHON) $(QUIET) ./$(word 2, $+) $(CHAINSTATE) $(BALANCES); \
 	fi
 requirements.txt:
+	# WARNING: may be necessary to `sudo apt install libleveldb-dev`
 	for requirement in plyvel base58 sqlite3 hashlib; do \
 	 $(PYTHON) -c "import $$requirement" 2>/dev/null || \
 	  (echo $$requirement >> $@; true); \
