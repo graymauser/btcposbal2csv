@@ -105,7 +105,7 @@ def in_mem(in_args):
         else:
             add_dict[add] = [val, height]
 
-    for key in add_dict.iterkeys():
+    for key in add_dict:
         ll = add_dict[key]
         yield key, ll[0], ll[1]
 
@@ -201,8 +201,10 @@ if __name__ == '__main__':
             for address, sat_val, block_height in add_iter:
                 if sat_val == 0:
                     continue
+                # make this work the same on Python2 and Python3
+                decoded = str(address.decode())
                 w.append(
-                    address + ',' + str(sat_val) + ',' + str(block_height)
+                    ','.join((decoded, str(sat_val), str(block_height)))
                 )
                 c += 1
                 if c == 1000:
@@ -212,4 +214,4 @@ if __name__ == '__main__':
             if c > 0:
                 f.write('\n'.join(w) + '\n')
             f.write('\n')
-        print('writen to %s' % args.out)
+        print('written to %s' % args.out)
