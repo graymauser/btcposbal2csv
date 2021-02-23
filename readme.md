@@ -25,19 +25,18 @@ To get current addresses with positive balance, let the full node client
 sync with the network.  **Stop** the bitcoin-core client before running this 
 utility. If you not stop the client, the database might get corrupted.  
 Then run this program with path to chainstate directory 
-(usualy $HOME/.bitcoin/chainstate).
+(usually $HOME/.bitcoin/chainstate).
 
 Show help
 ```
 python btcposbal2csv.py -h
 ```
 #### Example:  
-Following will read from `/home/USER/.bitcoin/chainstate`, and write result to `/home/USER/addresses_with_balance.csv`.
-```
-python btcposbal2csv.py /home/USER/.bitcoin/chainstate /home/USER/addresses_with_balance.csv
+Following will read from `$HOME/.bitcoin/chainstate`, and write result to `$HOME/addresses_with_balance.csv`.
+
+`python btcposbal2csv.py $HOME/.bitcoin/chainstate $HOME/addresses_with_balance.csv`
 
 Or you can just accept the defaults in the Makefile, and run: `make`
-```
 
 ##### Notice
 * The output may not be complete, as there are some transactions which are
@@ -54,7 +53,7 @@ BTC address must be in fist column, RIPEMD160 is added to csv. Output goes to st
 
 Example:
 ```
-python convert2ripemd160.py /home/USER/addresses_with_balance.csv
+python convert2ripemd160.py $HOME/addresses_with_balance.csv
 ```
 
 #### Acknowledgement
