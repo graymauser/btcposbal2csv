@@ -11,6 +11,11 @@ import sys
 # Fee per byte range
 NSPECIALSCRIPTS = 6
 
+# python3 compatibility
+if chr(189) == b'\xbd':
+    BYTECHR = chr
+else:
+    BYTECHR = lambda c: bytes((c,))
 
 def txout_decompress(x):
     """ Decompresses the Satoshi amount of a UTXO stored in the LevelDB. Code is a port from the Bitcoin Core C++
@@ -134,7 +139,11 @@ def decode_utxo(coin, outpoint, version=0.15):
     else:
         # First we will parse all the data encoded in the outpoint, that is, the transaction id and index of the utxo.
         # Check that the input data corresponds to a transaction.
-        assert outpoint[:2] == '43'
+        try:
+            assert outpoint[:2] == b'43'
+        except AssertionError:
+            raise AssertionError('First two characters of %r are not "43"' %
+                                 outpoint)
         # Check the provided outpoint has at least the minimum length (1 byte of key code, 32 bytes tx id, 1 byte index)
         assert len(outpoint) >= 68
         # Get the transaction id (LE) by parsing the next 32 bytes of the outpoint.
@@ -314,7 +323,7 @@ def parse_ldb(fin_name, version=0.15, types=(0, 1)):
     db = plyvel.DB(fin_name, compression=None)  # Change with path to chainstate
 
     # Load obfuscation key (if it exists)
-    o_key = db.get((unhexlify("0e00") + "obfuscate_key"))
+    o_key = db.get((unhexlify("0e00") + b"obfuscate_key"))
 
     # If the key exists, the leading byte indicates the length of the key (8 byte by default). If there is no key,
     # 8-byte zeros are used (since the key will be XORed with the given values).
@@ -394,7 +403,7 @@ def deobfuscate_value(obfuscation_key, value):
     # Get the extended obfuscation key by concatenating the obfuscation key with itself until it is as large as the
     # value to be de-obfuscated.
     if l_obf < l_value:
-        extended_key = (obfuscation_key * ((l_value / l_obf) + 1))[:l_value]
+        extended_key = (obfuscation_key * ((l_value // l_obf) + 1))[:l_value]
     else:
         extended_key = obfuscation_key[:l_value]
 
@@ -448,7 +457,7 @@ def hash_160_to_btc_address(h160, v):
         h160 = unhexlify(h160)
 
     # Add the network version leading the previously calculated RIPEMD-160 hash.
-    vh160 = chr(v) + h160
+    vh160 = BYTECHR(v) + h160
     # Double sha256.
     h = sha256(sha256(vh160).digest()).digest()
     # Add the two first bytes of the result as a checksum tailing the RIPEMD-160 hash.
