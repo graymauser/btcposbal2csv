@@ -33,7 +33,7 @@ python btcposbal2csv.py /home/USER/.bitcoin/chainstate /home/USER/addresses_with
 
 #### Converting to RIPEMD160
 Per request, I'm adding script which is able to convert BTC address to RIPEMD160 representation.
-BTC address must be in fist column, RIPEMD160 is added to csv. Output goes to stdout.
+BTC address must be in first column, RIPEMD160 is added to csv. Output goes to stdout.
 
 Example:
 ```
