@@ -1,3 +1,5 @@
 requirements.txt
 *.csv
 __pycache__
+*.pyo
+*.pyc
