@@ -11,12 +11,18 @@ export
 $(BALANCES): requirements.txt btcposbal2csv.py
 	# stop bitcoind if running, to avoid corrupting chainstate
 	$(PIP) install --user --requirement $<
-	if $$(pidof bitcoind); then \
+	if pidof bitcoind >/dev/null; then \
 	 bitcoin-cli stop; \
-	 $(PYTHON) $(QUIET) ./$(word 2, $+) $(CHAINSTATE) $(BALANCES); \
+	 while pidof bitcoind >/dev/null; do sleep 1; done; \
+	 $(PYTHON) $(QUIET) ./$(word 2, $+) $(CHAINSTATE) $(BALANCES)tmp; \
 	 bitcoind; \
 	else \
-	 $(PYTHON) $(QUIET) ./$(word 2, $+) $(CHAINSTATE) $(BALANCES); \
+	 $(PYTHON) $(QUIET) ./$(word 2, $+) $(CHAINSTATE) $(BALANCES)tmp; \
+	fi
+	if [ "$$(wc -c $(BALANCES)tmp | awk '{print 1}')" -gt 1 ]; then \
+	 mv $(BALANCES)tmp $(BALANCES); \
+	else \
+	 echo No balances found in chainstate >&2; \
 	fi
 requirements.txt:
 	# WARNING: may be necessary to `sudo apt install libleveldb-dev`
