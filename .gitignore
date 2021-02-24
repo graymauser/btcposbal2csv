@@ -3,3 +3,5 @@ requirements.txt
 __pycache__
 *.pyo
 *.pyc
+*.txt
+*.csvtmp
