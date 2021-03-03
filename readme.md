@@ -7,13 +7,7 @@ python 2.7
 pip  
 
 #### To install:  
-run pip install -r requirements.txt
-
-or install following packages with pip manualy
-* hashlib
-* plyvel
-* base58
-* sqlite3
+run sudo ./install.sh
 
 #### Usage
 To use you will need copy of chainstate database as created by [bitcoin core](https://bitcoin.org/en/bitcoin-core/)
@@ -39,7 +33,7 @@ python btcposbal2csv.py /home/USER/.bitcoin/chainstate /home/USER/addresses_with
 
 #### Converting to RIPEMD160
 Per request, I'm adding script which is able to convert BTC address to RIPEMD160 representation.
-BTC address must be in fist column, RIPEMD160 is added to csv. Output goes to stdout.
+BTC address must be in first column, RIPEMD160 is added to csv. Output goes to stdout.
 
 Example:
 ```
