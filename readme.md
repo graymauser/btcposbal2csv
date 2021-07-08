@@ -11,8 +11,6 @@ run pip install -r requirements.txt
 
 or install following packages with pip manualy
 
-* hashlib    #Python already has hashlib built in,This item can be removed
-
 for linux：
 * plyvel
 * base58
