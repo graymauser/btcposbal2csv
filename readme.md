@@ -10,10 +10,16 @@ pip
 run pip install -r requirements.txt
 
 or install following packages with pip manualy
-* hashlib
+
+for linux：
 * plyvel
 * base58
 * sqlite3
+
+for winodws：
+* plyvel-win32
+* base58
+* pysqlite3
 
 #### Usage
 To use you will need copy of chainstate database as created by [bitcoin core](https://bitcoin.org/en/bitcoin-core/)
