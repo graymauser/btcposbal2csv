@@ -4,12 +4,16 @@ import plyvel
 from binascii import hexlify, unhexlify
 from base58 import b58encode
 import sys
+import segwit_addr
 
 # THIS functions are from bitcoin_tools and was only mildly changed.
 # Please refer to readme.md for the proper link to that library.
 
 # Fee per byte range
 NSPECIALSCRIPTS = 6
+
+# Leading segwit str
+hrp = "bc"
 
 
 def txout_decompress(x):
@@ -365,6 +369,12 @@ def parse_ldb(fin_name, version=0.15, types=(0, 1)):
                 if out['out_type'] not in types:
                     continue
                 add = 'P2PK'
+                yield add, out['amount'], value['height']
+            elif out['out_type'] in (28, 40):
+                datalist = list(bytearray.fromhex(out['data']))
+                witver = datalist[0]
+                program = datalist[2:(datalist[1]+2)]
+                add = segwit_addr.encode(hrp, witver, program)
                 yield add, out['amount'], value['height']
             else:
                 not_decoded[0] += 1
